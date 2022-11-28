@@ -18,7 +18,9 @@ module load gcc
 
 echo "===> Anaconda env loaded"
 source ~/.bashrc
-source activate openpoints
+conda activate openpoints
+exprot PATH="/usr/local/lib/python3.7/site-packages:/opt/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/tools/node/bin:/tools/google-cloud-sdk/bin"
+echo $PATH
 
 nvidia-smi
 nvcc --version
