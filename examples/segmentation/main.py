@@ -279,10 +279,7 @@ def main(gpu, cfg):
                             is_best=is_best
                             )
             is_best = False
-         wandb.log({"generated_samples":
-           [wandb.Object3D(open("sample.obj")),
-            wandb.Object3D(open("sample.gltf")),
-            wandb.Object3D(open("sample.glb"))]})
+
     # do not save file to wandb to save wandb space
     if writer is not None:
         Wandb.add_file(os.path.join(cfg.ckpt_dir, f'{cfg.run_name}_ckpt_best.pth'))
@@ -381,11 +378,12 @@ def train_one_epoch(model, train_loader, criterion, optimizer, scheduler, scaler
         # update confusion matrix
         cm.update(logits.argmax(dim=1), target)
         loss_meter.update(loss.item())
-        wandb.log({"loss": loss, "accuracy": accuracy, "predictions": predictions})
+        wandb.log({"loss": loss, "accuracy": cm.overall_accuracy})
         if idx % cfg.print_freq:
             pbar.set_description(f"Train Epoch [{epoch}/{cfg.epochs}] "
                                  f"Loss {loss_meter.val:.3f} Acc {cm.overall_accuray:.2f}")
     miou, macc, oa, ious, accs = cm.all_metrics()
+    wandb.log({"miou": miou, "macc": macc, "oa": oa, "ious": ious, "accs": accs})
     return loss_meter.avg, miou, macc, oa, ious, accs
 
 
