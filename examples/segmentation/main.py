@@ -378,7 +378,7 @@ def train_one_epoch(model, train_loader, criterion, optimizer, scheduler, scaler
         # update confusion matrix
         cm.update(logits.argmax(dim=1), target)
         loss_meter.update(loss.item())
-        wandb.log({"loss": loss, "accuracy": cm.overall_accuracy})
+        wandb.log({"loss": loss, "accuracy": cm.overall_accuray})
         if idx % cfg.print_freq:
             pbar.set_description(f"Train Epoch [{epoch}/{cfg.epochs}] "
                                  f"Loss {loss_meter.val:.3f} Acc {cm.overall_accuray:.2f}")
