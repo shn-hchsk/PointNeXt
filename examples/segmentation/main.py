@@ -230,7 +230,7 @@ def main(gpu, cfg):
         scaler = torch.cuda.amp.GradScaler()
     else:
         scaler = None
-
+    wandb.init() 
     val_miou, val_macc, val_oa, val_ious, val_accs = 0., 0., 0., [], []
     best_val, macc_when_best, oa_when_best, ious_when_best, best_epoch = 0., 0., 0., [], 0
     for epoch in range(cfg.start_epoch, cfg.epochs + 1):
@@ -238,6 +238,7 @@ def main(gpu, cfg):
             train_loader.sampler.set_epoch(epoch)
         if hasattr(train_loader.dataset, 'epoch'):  # some dataset sets the dataset length as a fixed steps.
             train_loader.dataset.epoch = epoch - 1
+             
         train_loss, train_miou, train_macc, train_oa, _, _ = \
             train_one_epoch(model, train_loader, criterion, optimizer, scheduler, scaler, epoch, cfg)
 
